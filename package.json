@@ -4,7 +4,7 @@
   "description": "Simple authentication system",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brad Traversy",
@@ -21,6 +21,7 @@
     "express-validator": "*",
     "mongodb": "*",
     "mongoose": "*",
+    "nodemon": "^1.17.5",
     "passport": "*",
     "passport-http": "*",
     "passport-local": "*"
