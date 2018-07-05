@@ -5,6 +5,11 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('../models/user');
 
+var profile = require('./profile');
+
+// Profile router
+router.use('/profile', profile);
+
 // Register
 router.get('/register', function (req, res) {
 	res.render('register');
@@ -101,9 +106,9 @@ passport.deserializeUser(function (id, done) {
 });
 
 router.post('/login',
-	passport.authenticate('local', { successRedirect: '/', failureRedirect: '/users/login', failureFlash: true }),
+	passport.authenticate('local', { successRedirect: '/users/profile', failureRedirect: '/users/login', failureFlash: true }),
 	function (req, res) {
-		res.redirect('/');
+		res.redirect('/users/profile');
 	});
 
 router.get('/logout', function (req, res) {

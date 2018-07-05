@@ -29,6 +29,14 @@ module.exports.createUser = function(newUser, callback){
 	});
 }
 
+module.exports.getAll = function(callback){
+	var query = User.find();
+	query.exec((err,result) => {
+		if (err) return console.log(err);
+		callback(result);
+	});
+};
+
 module.exports.getUserByUsername = function(username, callback){
 	var query = {username: username};
 	User.findOne(query, callback);
