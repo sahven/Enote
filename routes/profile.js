@@ -26,7 +26,7 @@ router.get('/', ensureAuthenticated, (req,res) => {
 router.get('/create', ensureAuthenticated, (req,res) => {
 	User.getAll(function(result) {
 		var users = Object.keys(result).map(i => result[i]);
-		res.render('create',users);
+		res.render('create',{users});
 	});
 });
 
