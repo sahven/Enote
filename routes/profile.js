@@ -76,4 +76,20 @@ router.post('/create', ensureAuthenticated, (req,res) => {
 });
 
 
+router.get('/view', ensureAuthenticated, (req,res) => {
+	var id = req.user.id;
+	var name = req.user.name;
+	// Note.getUserNotes(id, name, (err,result) => {
+	// 	if (err) return console.log('Error in getting : ',err);
+	// 	var notes = Object.keys(result).map(i => result[i]);
+	// 	res.render('viewnote', {notes});
+	// });
+	var query = Note.find({"author.authorid" : id, "author.name" : name});
+	query.exec((err,result) => {
+		if (err) return console.log('Error : ',err);
+		var notes = Object.keys(result).map(i => result[i]);
+		res.render('viewnote',{notes});
+	});
+});
+
 module.exports = router;

@@ -46,4 +46,4 @@ var Note = module.exports = mongoose.model('Note', NoteSchema);
 
 module.exports.createNote = (newNote,callback) => {
 	newNote.save(callback);
-}
+};
