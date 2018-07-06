@@ -1,4 +1,11 @@
 <h2>Create a new enote</h2>
+
+{{#if errors}}
+      {{#each errors}}
+        <div class="alert alert-danger">{{msg}}</div>
+      {{/each}}
+{{/if}}
+
 <form method="post" action="/users/profile/create">
    <div class="form-group">
     <label>Subject</label>
@@ -10,26 +17,23 @@
   </div>
    <div class="form-group">
     <label>Details</label>
-    <input type="email" class="form-control" placeholder="Details" name="details">
+    <input type="text" class="form-control" placeholder="Details" name="details">
   </div>
   <div class="form-group">
     <label>Budget</label>
-    <input type="password" class="form-control" placeholder="Budget" name="budget">
+    <input type="text" class="form-control" placeholder="Budget" name="budget">
   </div>
-  <div class="form-group">
-    <label>
-      {{#each users}}
-        {{this}}
-      {{/each}}
-    </label>
+   <div class="form-group">
+    <label>Reviewer Username-1</label>
+    <input type="text" class="form-control" placeholder="Reviewer-1" name="reviewer1">
   </div>
-  <div class="form-group">
-        <label for="sel1">Select Reviewers (hold shift key to select multiple):</label>
-        <select multiple class="form-control" id="sel1">
-          {{#each allusers}}
-          <option value="{{this.name}}">{{this.name}}</option>
-          {{/each}}
-        </select>
-      </div>
+   <div class="form-group">
+    <label>Reviewer Username-2</label>
+    <input type="text" class="form-control" placeholder="Reviewer-2" name="reviewer2">
+  </div>
+   <div class="form-group">
+    <label>Reviewer Username-3</label>
+    <input type="text" class="form-control" placeholder="Reviewer-3" name="reviewer3">
+  </div>
   <button type="submit" class="btn btn-default">Submit</button>
 </form>
