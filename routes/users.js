@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+const {check}=require('express-validator/check')
 
 var User = require('../models/user');
 
@@ -12,7 +13,7 @@ router.use('/profile', profile);
 
 // Register
 router.get('/register', function (req, res) {
-	res.render('register');
+	res.render('register',{csrfToken:req.csrfToken()});
 });
 
 // Login
@@ -21,7 +22,12 @@ router.get('/login', function (req, res) {
 });
 
 // Register User
-router.post('/register', function (req, res) {
+router.post('/register', [check('password','Password should be of atleast 8 character long and have a digit and a special character')
+.isLength({min:8})
+.matches(/\d/).matches(/[A-Za-z]/)
+.matches(/[!#@$%]/).withMessage('Password should have a special character')
+],
+function (req, res) {
 	var name = req.body.name;
 	var email = req.body.email;
 	var username = req.body.username;
