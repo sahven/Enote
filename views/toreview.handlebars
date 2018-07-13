@@ -1,0 +1,33 @@
+<h2>View notes to review</h2>
+<div class="jumbotron">
+	{{#if final}}
+	{{#each final}}
+		<p>Author : {{this.author.name}}</p>		
+		<p>Subject : {{this.subject}}</p>
+		<p>Purpose : {{this.purpose}}</p>
+		<p>Budget : {{this.budget}}</p>
+		<p>Previous Comments : {{this.comments}}</p>
+		<form method="post" action="/users/profile/toreview">
+		   
+	   	<div class="form-group">
+	    	<label>Add new comments</label>
+		    <input type="text" class="form-control" placeholder="Comments" name="comments">
+		    <input type="hidden" class="form-control" name="noteid" value="{{this.id}}">
+	  	</div>
+  	    <div class="form-group">
+  	      <label for="sel1">Take an action :</label>
+	  	      <select class="form-control" id="sel1" name="action">
+	  	        <option>Accept</option>
+	  	        <option>Reject</option>
+	  	      </select>
+	  	      <br>
+  	    </div>
+		  <button type="submit" class="btn btn-default">Submit</button>
+		</form>
+		<p>Status : {{this.status}}</p>
+		<hr>
+	{{/each}}
+	{{else}}
+		<p>You have no notes to review.</p>
+	{{/if}}
+</div>

@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 const {Schema} = require('mongoose');
 
 
+
 //Author Schema
 var authorSchema = mongoose.Schema({
 	authorid : Schema.Types.ObjectId,
@@ -31,10 +32,13 @@ var NoteSchema = mongoose.Schema({
 		type : String
 	},
 	reviewers : {
-		type : [String]
+		type : [{name : String, action : {
+			type : String,
+			default : "Pending"
+		}}]
 	},
 	comments : {
-		type : [{by : String, body : String, date : Date}]
+		type : [{by : String, body : String}]
 	},
 	status : {
 		type : String,

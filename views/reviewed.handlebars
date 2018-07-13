@@ -1,19 +1,17 @@
-<h2>View your notes</h2>
+<h2>View notes that you've reviewed</h2>
 <div class="jumbotron">
-	{{#each notes}}
+	{{#if final}}
+	{{#each final}}
 		<p>Author : {{this.author.name}}</p>		
 		<p>Subject : {{this.subject}}</p>
 		<p>Purpose : {{this.purpose}}</p>
 		<p>Budget : {{this.budget}}</p>
-		<p>Reviewers :</p>
-		{{#each this.reviewers}}
-			{{#if this.name}}
-				<p>Name : {{this.name}}</p>
-				<p>Action : {{this.action}}</p>
-			{{/if}}
-		{{/each}} 
+		<p>Reviewers : {{this.reviewers}}</p>
 		<p>Comments : {{this.comments}}</p>
 		<p>Status : {{this.status}}</p>
 		<hr>
 	{{/each}}
+	{{else}}
+		<p>You haven't reviewed any notes.</p>
+	{{/if}}
 </div>
