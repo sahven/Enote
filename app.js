@@ -10,7 +10,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-
+var csrf=require('csurf');
 mongoose.connect('mongodb://localhost/enoteApp');
 var db = mongoose.connection;
 
@@ -34,6 +34,14 @@ app.use(cookieParser());
 
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+//csrf protection
+app.use(csrf({cookie:true}));
+app.use(function(err,req,res,next){
+  if(err.code !== "EBADCSRFTOKEN")return next(err);
+  res.status(403);
+  res.send('Form has been tampered with');
+});
 
 // Express Session
 app.use(session({
