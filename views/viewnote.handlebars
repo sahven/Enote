@@ -5,9 +5,14 @@
 		<p>Subject : {{this.subject}}</p>
 		<p>Purpose : {{this.purpose}}</p>
 		<p>Budget : {{this.budget}}</p>
-		<p>Reviewers : {{this.reviewers}}</p>
-		<p>Comments : {{this.comments}}</p>
-		<p>Status : {{this.status}}</p>
+		{{#each reviewers}}
+		<li>
+			<p>Reviewer : {{this.mail}}</p>
+			<p>comments : {{this.comments}}</p>
+			<p>Reviewer approval : {{this.approved}}</p>
+		</li>
+		{{/each}}
+		<p>Approval : {{this.status}}</p>
 		<hr>
 	{{/each}}
 </div>
