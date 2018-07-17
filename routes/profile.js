@@ -6,7 +6,6 @@ var LocalStrategy = require('passport-local').Strategy;
 var User = require('../models/user');
 var Note = require('../models/note');
 
-
 // Function to ensure that user is logged in before accessing the page
 function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
@@ -39,11 +38,8 @@ router.post('/create', ensureAuthenticated, (req,res) => {
 	var details = req.body.details;
 	var budget = req.body.budget;
 	var reviewer1 = req.body.reviewer1;
-	var reviewer2 = req.body.reviewer2;
-	var reviewer3 = req.body.reviewer3;
 	var authorid = req.user.id;
 	var authorname = req.user.name;
-
 	//Validation
 	req.checkBody('subject', 'Subject is required').notEmpty();
 	req.checkBody('purpose', 'Purpose is required').notEmpty();
@@ -63,12 +59,19 @@ router.post('/create', ensureAuthenticated, (req,res) => {
 			purpose : purpose,
 			details : details,
 			budget : budget,
-			reviewers : [reviewer1,reviewer3,reviewer2]
 		});
-
 		Note.createNote(newNote,(err,note) => {
 			if (err) throw err;
-			console.log(note);
+			if(reviewer1!="")
+			{
+				var q1=User.find({"email":reviewer1});
+				q1.exec((err,result)=>{
+					if(err) throw err;
+					note.reviewers.push({mail:reviewer1,comments:"",approved:""});
+					note.save();
+					console.log(note);
+				});
+			}
 		});
 		req.flash('success_msg', 'The note was created successfully.');
 		res.redirect('/users/profile/');
@@ -79,17 +82,66 @@ router.post('/create', ensureAuthenticated, (req,res) => {
 router.get('/view', ensureAuthenticated, (req,res) => {
 	var id = req.user.id;
 	var name = req.user.name;
-	// Note.getUserNotes(id, name, (err,result) => {
-	// 	if (err) return console.log('Error in getting : ',err);
-	// 	var notes = Object.keys(result).map(i => result[i]);
-	// 	res.render('viewnote', {notes});
-	// });
-	var query = Note.find({"author.authorid" : id, "author.name" : name});
-	query.exec((err,result) => {
+	var q = Note.find({"author.authorid":id,"author.name":name});
+	q.exec((err,result) => {
 		if (err) return console.log('Error : ',err);
 		var notes = Object.keys(result).map(i => result[i]);
 		res.render('viewnote',{notes});
 	});
 });
 
+router.get('/review', ensureAuthenticated, (req,res) => {
+	var email = req.user.email;
+	console.log(email);
+	var query =  Note.find({"reviewers":{$elemMatch:{mail:email,approved:""}}});
+	query.exec((err,result) => {
+		if (err) return console.log('Error : ',err);
+		var notes = Object.keys(result).map(i => result[i]);
+		res.render('reviewnotes',{notes});
+	});
+});
+
+router.post('/review' , ensureAuthenticated, (req,res) =>{
+	var email = req.user.email;
+	var noteid = req.body.noteid;
+	var cmt = req.body.comment;
+	var r1 = req.body.reviewer1;
+	var a = req.body.approve;
+	var mongo = require('mongodb');
+	var o_id = new mongo.ObjectID(noteid);
+	var query = Note.updateOne({"_id":o_id,"reviewers.mail":email,"reviewers.approved":""},{$set:{"reviewers.$.comments":cmt,"reviewers.$.approved":a}});
+	query.exec((err,result) => {
+		if (err) return console.log('Error : ',err);
+		if(r1!="")
+		{
+			var q1=User.find({"email":r1});
+			q1.exec((err,result)=>{
+				if(err) return console.log('Error:',err);
+				var query1 = Note.updateOne({"_id":o_id},{$push:{reviewers:{mail:r1,comments:"",approved:""}}});
+				query1.exec((err,result)=>{
+					if(err) return console.log('Error:',err);
+					});
+				});
+		}
+		else
+		{
+			if(a=="yes")
+			{
+				var query2 = Note.updateOne({"_id":o_id},{$set:{"status":"Approved"}});
+				query2.exec((err,result) => {
+					if(err) throw err;
+				})
+			}
+			else if(a=="no")
+			{
+				var query3 = Note.updateOne({"_id":o_id},{$set:{"status":"Rejected"}});
+				query3.exec((err,result) => {
+					if(err) throw err;
+				})
+			}
+		}
+		req.flash('success_msg', 'The note was reviewed successfully.');
+		res.redirect('/users/profile/review');
+	});
+});
 module.exports = router;
