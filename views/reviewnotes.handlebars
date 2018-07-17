@@ -1,0 +1,30 @@
+<h2>Review received notes</h2>
+<div class="jumbotron">
+	{{#each notes}}
+		<p>Note-id : {{this._id}}</p>
+		<p>Author : {{this.author.name}}</p>		
+		<p>Subject : {{this.subject}}</p>
+		<p>Purpose : {{this.purpose}}</p>
+		<p>Budget : {{this.budget}}</p>
+		<form method="post" action="/users/profile/review">
+		<div class="form-group">
+    <label>Note-id</label>
+    <input type="text" class="form-control" placeholder="Enter the id given above" name="noteid">
+  </div>
+   	<div class="form-group">
+    <label>Comments</label>
+    <input type="text" class="form-control" placeholder="comments" name="comment">
+  </div>
+  <div class="form-group">
+    <label>Reviewer email</label>
+    <input type="text" class="form-control" placeholder="Reviewer-1-email" name="reviewer1">
+  </div>
+  <div class="form-group">
+    <label>Approval..yes or no?</label>
+    <input type="text" class="form-control" placeholder="Yes or no" name="approve">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+		<hr>
+	{{/each}}
+</div>
