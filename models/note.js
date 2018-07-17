@@ -7,6 +7,12 @@ var authorSchema = mongoose.Schema({
 	authorid : Schema.Types.ObjectId,
 	name : String
 });
+
+var reviewerSchema = mongoose.Schema({
+	mail : String,
+	comments : String,
+	approved : String
+})
 // Note Schema
 var NoteSchema = mongoose.Schema({
 	author : {
@@ -31,10 +37,7 @@ var NoteSchema = mongoose.Schema({
 		type : String
 	},
 	reviewers : {
-		type : [String]
-	},
-	comments : {
-		type : [{by : String, body : String, date : Date}]
+		type : [reviewerSchema]
 	},
 	status : {
 		type : String,
