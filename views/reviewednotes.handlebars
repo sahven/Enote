@@ -1,0 +1,10 @@
+<h2>View reviewed notes</h2>
+<div class="jumbotron">
+	{{#each notes}}
+		<p>Author : {{this.author.name}}</p>		
+		<p>Subject : {{this.subject}}</p>
+		<p>Purpose : {{this.purpose}}</p>
+		<p>Budget : {{this.budget}}</p>
+		<hr>
+	{{/each}}
+</div>
