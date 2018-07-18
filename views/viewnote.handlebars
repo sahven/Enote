@@ -5,13 +5,24 @@
 		<p>Subject : {{this.subject}}</p>
 		<p>Purpose : {{this.purpose}}</p>
 		<p>Budget : {{this.budget}}</p>
-		{{#each reviewers}}
-		<li>
-			<p>Reviewer : {{this.mail}}</p>
-			<p>comments : {{this.comments}}</p>
-			<p>Reviewer approval : {{this.approved}}</p>
-		</li>
-		{{/each}}
+		<table class="table">
+			<tbody>
+				<tr>
+					<td>Reviewer</td>
+					<td>comments</td>
+					<td>approval</td>
+				</tr>
+				{{#each reviewers}}
+					<tr>
+					
+						<td>{{this.mail}}</td>
+						<td>{{this.comments}}</td>
+						<td>{{this.approved}}</td>
+					
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
 		<p>Approval : {{this.status}}</p>
 		<hr>
 	{{/each}}
