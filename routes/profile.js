@@ -144,4 +144,15 @@ router.post('/review' , ensureAuthenticated, (req,res) =>{
 		res.redirect('/users/profile/review');
 	});
 });
+
+router.get('/reviewed', ensureAuthenticated, (req,res)=>{
+	var email = req.user.email;
+	console.log(email);
+	var query =  Note.find({"reviewers":{$elemMatch:{mail:email,"$or":[{"approved":"yes"},{"approved":"no"}]}}});
+	query.exec((err,result) => {
+		if (err) return console.log('Error : ',err);
+		var notes = Object.keys(result).map(i => result[i]);
+		res.render('reviewednotes',{notes});
+	});
+})
 module.exports = router;
